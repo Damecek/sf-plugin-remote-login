@@ -8,7 +8,7 @@ This is a proof of concept for the upstream feature request in forcedotcom/cli (
 
 ## Install
 
-Requires Salesforce CLI (`sf`) 2.x and Node.js 20 or newer on the machine that runs the CLI.
+Requires Salesforce CLI (`sf`) 2.x and Node.js 22 or newer on the machine that runs the CLI.
 
 ```bash
 sf plugins install https://github.com/Damecek/sf-plugin-remote-login.git
@@ -34,14 +34,14 @@ Successfully authorized developer@example.com with org ID 00D...
 
 Flags:
 
-| Flag | Meaning |
-| --- | --- |
-| `-a, --alias` | Alias for the org. |
-| `-r, --instance-url` | Login URL. Default: the `org-instance-url` config value or `https://login.salesforce.com`. Use `https://test.salesforce.com` for sandboxes or your My Domain URL for SSO. |
-| `-s, --set-default` | Make the org the default target org. |
-| `-d, --set-default-dev-hub` | Make the org the default Dev Hub. |
-| `--timeout` | Minutes to wait for the pasted URL (default 15). |
-| `--json` | JSON output (tokens are redacted, same as `org login web`). |
+| Flag                        | Meaning                                                                                                                                                                   |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-a, --alias`               | Alias for the org.                                                                                                                                                        |
+| `-r, --instance-url`        | Login URL. Default: the `org-instance-url` config value or `https://login.salesforce.com`. Use `https://test.salesforce.com` for sandboxes or your My Domain URL for SSO. |
+| `-s, --set-default`         | Make the org the default target org.                                                                                                                                      |
+| `-d, --set-default-dev-hub` | Make the org the default Dev Hub.                                                                                                                                         |
+| `--timeout`                 | Minutes to wait for the pasted URL (default 15).                                                                                                                          |
+| `--json`                    | JSON output (tokens are redacted, same as `org login web`).                                                                                                               |
 
 After the login every standard command works as usual:
 
@@ -76,13 +76,13 @@ There are about 150 lines of source: `src/commands/org/login/remote.ts` (the com
 
 ## Why not Device Flow or JWT
 
-| | Device Flow (`org login device`, removed) | JWT (`org login jwt`) | This plugin |
-| --- | --- | --- | --- |
-| Human logs in interactively with SSO and MFA | yes | no | yes |
-| Works with the built-in connected app | no longer (disabled by Salesforce in 2025, see forcedotcom/cli#3368) | no (needs your own connected app, certificate and pre-authorized profiles) | yes |
-| Needs setup before the first login | no | yes, per org | no |
-| Needs a browser on the CLI machine | no | no | no |
-| OAuth flow | device authorization grant | JWT bearer | authorization code + PKCE (same as `org login web`) |
+|                                              | Device Flow (`org login device`, removed)                            | JWT (`org login jwt`)                                                      | This plugin                                         |
+| -------------------------------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------------- | --------------------------------------------------- |
+| Human logs in interactively with SSO and MFA | yes                                                                  | no                                                                         | yes                                                 |
+| Works with the built-in connected app        | no longer (disabled by Salesforce in 2025, see forcedotcom/cli#3368) | no (needs your own connected app, certificate and pre-authorized profiles) | yes                                                 |
+| Needs setup before the first login           | no                                                                   | yes, per org                                                               | no                                                  |
+| Needs a browser on the CLI machine           | no                                                                   | no                                                                         | no                                                  |
+| OAuth flow                                   | device authorization grant                                           | JWT bearer                                                                 | authorization code + PKCE (same as `org login web`) |
 
 JWT is the right tool for unattended automation. It is not a replacement for "a developer wants to give an agent access to an org they have not set anything up for yet".
 
@@ -112,7 +112,7 @@ What you should still think about:
 
 See [VERIFICATION.md](VERIFICATION.md) for the exact runs. Summary:
 
-- Unit tests: macOS (Node 26) and GitHub Actions Ubuntu (Node 20, 22).
+- Unit tests: macOS (Node 26) and GitHub Actions Ubuntu (Node 22, 24).
 - Plugin installation into `sf` from this git repository: GitHub Actions Ubuntu.
 - Headless Linux end-to-end login: Docker `node:22-bookworm-slim` container, no `DISPLAY`, no browser, with the login completed on an iPhone in Safari.
 
