@@ -14,7 +14,7 @@ Requires Salesforce CLI (`sf`) 2.x and Node.js 20 or newer on the machine that r
 sf plugins install https://github.com/Damecek/sf-plugin-remote-login.git
 ```
 
-The plugin is not published to npm. Installing from a git URL builds it locally, so `npm` needs network access during the install.
+The plugin is not published to npm and is not signed by Salesforce, so `sf` asks for confirmation (in scripts, pipe `echo y` into the command). Installing from a git URL builds it locally, so `npm` needs network access during the install.
 
 ## Usage
 

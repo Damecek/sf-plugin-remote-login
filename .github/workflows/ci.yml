@@ -33,6 +33,6 @@ jobs:
           node-version: 22
       - run: npm install -g @salesforce/cli
       - name: Install plugin from this commit
-        run: sf plugins install "https://github.com/${{ github.repository }}.git#${{ github.sha }}"
+        run: echo y | sf plugins install "https://github.com/${{ github.repository }}.git#${{ github.sha }}"
       - run: sf plugins | grep sf-plugin-remote-login
       - run: sf org login remote --help
