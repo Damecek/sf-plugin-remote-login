@@ -4,7 +4,7 @@ Salesforce CLI plugin that adds one command, `sf org login remote`, for logging 
 
 The CLI prints the normal Salesforce authorization URL and waits. You open the URL in any browser on any device (an iPhone is enough), log in as usual (SSO and MFA included), and paste the final redirect URL back into the waiting terminal. The CLI validates it, exchanges the authorization code for tokens, and stores the org exactly like `sf org login web` does.
 
-This is a proof of concept for the upstream feature request in forcedotcom/cli (link in [Upstream proposal](#upstream-proposal)).
+This is a proof of concept for the upstream feature request [forcedotcom/cli#3674](https://github.com/forcedotcom/cli/discussions/3674).
 
 ## Install
 
@@ -129,7 +129,7 @@ sf plugins link . # try it in your local sf
 
 ## Upstream proposal
 
-The matching feature request for the official CLI (`sf org login web --manual` or similar) is tracked in forcedotcom/cli. The issue link is added here once it is filed.
+The matching feature request for the official CLI (`sf org login web --manual` or similar) is forcedotcom/cli discussion [#3674](https://github.com/forcedotcom/cli/discussions/3674), filed in the Ideas category because that repository routes feature requests to Discussions.
 
 ## License
 
