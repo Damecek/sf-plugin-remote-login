@@ -1,0 +1,82 @@
+{
+  "name": "sf-plugin-remote-login",
+  "description": "Salesforce CLI plugin: interactive OAuth web login for headless environments (print URL, paste callback)",
+  "version": "0.1.0",
+  "author": "Adam Stepanek",
+  "license": "MIT",
+  "type": "module",
+  "repository": "Damecek/sf-plugin-remote-login",
+  "homepage": "https://github.com/Damecek/sf-plugin-remote-login",
+  "bugs": "https://github.com/Damecek/sf-plugin-remote-login/issues",
+  "keywords": [
+    "sf",
+    "sf-plugin",
+    "sfdx-plugin",
+    "salesforce",
+    "oauth",
+    "headless"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "files": [
+    "/lib",
+    "/messages",
+    "/oclif.manifest.json"
+  ],
+  "dependencies": {
+    "@jsforce/jsforce-node": "^3.12.0",
+    "@oclif/core": "^5.0.0",
+    "@salesforce/core": "^9.1.11",
+    "@salesforce/sf-plugins-core": "^13.0.4"
+  },
+  "devDependencies": {
+    "@salesforce/dev-config": "^4.3.1",
+    "@salesforce/prettier-config": "^0.0.3",
+    "@salesforce/ts-sinon": "^1.4.36",
+    "@types/chai": "^4.3.17",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^20",
+    "@types/sinon": "^10.0.20",
+    "chai": "^4.5.0",
+    "eslint": "^10.0.0",
+    "eslint-config-salesforce-typescript": "^7.0.0",
+    "mocha": "^10.8.2",
+    "oclif": "^5.0.0",
+    "prettier": "^3.0.0",
+    "sinon": "^18.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.0"
+  },
+  "oclif": {
+    "commands": "./lib/commands",
+    "bin": "sf",
+    "topicSeparator": " ",
+    "flexibleTaxonomy": true,
+    "topics": {
+      "org": {
+        "external": true,
+        "subtopics": {
+          "login": {
+            "external": true,
+            "subtopics": {
+              "remote": {
+                "description": "Authorize an org from a headless environment by pasting the OAuth callback URL."
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsc -p . && oclif manifest",
+    "clean": "rm -rf lib oclif.manifest.json",
+    "compile": "tsc -p .",
+    "format": "prettier --write \"{src,test}/**/*.ts\" \"*.{json,md}\"",
+    "lint": "eslint src test",
+    "prepare": "npm run build",
+    "test": "TS_NODE_PROJECT=test/tsconfig.json mocha \"test/**/*.test.ts\"",
+    "typecheck": "tsc -p . --noEmit && tsc -p test --noEmit"
+  }
+}

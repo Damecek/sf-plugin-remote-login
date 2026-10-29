@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - name: Command discovery through the oclif runner (no DISPLAY, no browser)
+        run: |
+          test -f oclif.manifest.json
+          ./bin/run.js org login remote --help
+  install-into-sf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install -g @salesforce/cli
+      - name: Install plugin from this commit
+        run: sf plugins install "https://github.com/${{ github.repository }}.git#${{ github.sha }}"
+      - run: sf plugins | grep sf-plugin-remote-login
+      - run: sf org login remote --help

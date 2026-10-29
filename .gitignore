@@ -1,0 +1,7 @@
+node_modules
+lib
+oclif.manifest.json
+*.tgz
+*.tsbuildinfo
+.eslintcache
+.DS_Store

@@ -1,0 +1,14 @@
+{
+  "extends": "@salesforce/dev-config/tsconfig-test-strict-esm",
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "noEmit": true,
+    "types": [
+      "mocha",
+      "node"
+    ]
+  },
+  "include": [
+    "./**/*.ts"
+  ]
+}
