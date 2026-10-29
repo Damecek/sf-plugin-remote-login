@@ -32,12 +32,15 @@ export default class LoginRemote extends SfCommand<AuthFields> {
       summary: messages.getMessage('flags.timeout.summary'),
       default: 15,
       min: 1,
+      max: 1440,
     }),
     loglevel,
   };
 
   public async run(): Promise<AuthFields> {
     const { flags } = await this.parse(LoginRemote);
+    // The hidden prompt renders on stdout, which would corrupt JSON output.
+    if (this.jsonEnabled()) throw messages.createError('error.jsonNotSupported');
 
     const loginUrl = flags['instance-url']?.href ?? AuthInfo.getDefaultInstanceUrl();
     if (new SfdcUrl(loginUrl).isLightningDomain()) {
@@ -64,7 +67,11 @@ export default class LoginRemote extends SfCommand<AuthFields> {
       if (err instanceof Error && err.name === 'ExitPromptError') {
         throw messages.createError('error.cancelled');
       }
-      throw messages.createError('error.timeout', [flags.timeout]);
+      // sf-plugins-core's secretPrompt rejects with exactly this message on timeout.
+      if (err instanceof Error && err.message === 'Prompt timed out.') {
+        throw messages.createError('error.timeout', [flags.timeout]);
+      }
+      throw err;
     }
 
     session.oauthConfig.authCode = parseCallbackUrl(pasted, { redirectUri, state: session.oauthConfig.state });

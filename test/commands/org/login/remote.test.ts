@@ -179,12 +179,32 @@ describe('org login remote', () => {
   });
 
   it('fails with a timeout error when the prompt times out', async () => {
-    secretPrompt.rejects(new Error('Prompt timed out after 60000 ms'));
+    secretPrompt.rejects(new Error('Prompt timed out.'));
     const err = await runAndCatch(['--timeout', '1']);
     expect(err.name).to.equal('TimeoutError');
     expect(err.message).to.include('1 minutes');
     expect(secretPrompt.firstCall.args[0]).to.deep.include({ ms: 60_000 });
     expect(authInfoCreate.called).to.be.false;
+  });
+
+  it('rethrows unexpected prompt failures instead of reporting a timeout', async () => {
+    secretPrompt.rejects(new Error('stdin closed'));
+    const err = await runAndCatch();
+    expect(err.message).to.include('stdin closed');
+    expect(err.name).to.not.equal('TimeoutError');
+  });
+
+  it('rejects --json before printing anything, because the hidden prompt writes to stdout', async () => {
+    const err = await runAndCatch(['--json']);
+    expect(err.name).to.equal('JsonNotSupportedError');
+    expect(secretPrompt.called).to.be.false;
+    expect(uxStubs.log.called).to.be.false;
+  });
+
+  it('caps --timeout so the timer cannot overflow', async () => {
+    const err = await runAndCatch(['--timeout', '99999']);
+    expect(err.message).to.match(/1440|max/i);
+    expect(secretPrompt.called).to.be.false;
   });
 
   it('fails with a cancellation error when the user aborts the prompt', async () => {

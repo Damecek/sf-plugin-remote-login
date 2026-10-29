@@ -130,6 +130,18 @@ describe('parseCallbackUrl', () => {
     expect(bare.message).to.equal('invalid_scope');
   });
 
+  it('strips control characters from error descriptions before they reach the terminal', () => {
+    const err = expectSfError(
+      () =>
+        parseCallbackUrl(
+          `${redirectUri}?error=x&error_description=${encodeURIComponent('bad\u001b[2Jtext\r\n')}&state=${state}`,
+          expected,
+        ),
+      'OAuthError',
+    );
+    expect(err.message).to.equal('bad[2Jtext');
+  });
+
   it('rejects a callback without an authorization code', () => {
     expectSfError(() => parseCallbackUrl(`${redirectUri}?state=${state}`, expected), 'MissingAuthCodeError');
     expectSfError(() => parseCallbackUrl(`${redirectUri}?code=&state=${state}`, expected), 'MissingAuthCodeError');

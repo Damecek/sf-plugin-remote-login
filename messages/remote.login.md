@@ -93,3 +93,7 @@ Login cancelled.
 # error.lightningInstanceUrl
 
 Lightning domains cannot be used as --instance-url. Use the My Domain login URL (https://<mydomain>.my.salesforce.com) instead.
+
+# error.jsonNotSupported
+
+This command is interactive and does not support --json. Run it without --json; the authorization is stored the same way and "org display --json" shows the result.

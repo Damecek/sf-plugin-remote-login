@@ -65,13 +65,18 @@ export function parseCallbackUrl(input: string, expected: { redirectUri: string;
 
   const error = url.searchParams.get('error');
   if (error) {
-    throw new SfError(url.searchParams.get('error_description') ?? error, 'OAuthError');
+    throw new SfError(sanitize(url.searchParams.get('error_description') ?? error), 'OAuthError');
   }
 
   const code = url.searchParams.get('code');
   if (!code) throw messages.createError('error.missingAuthCode');
   return code;
 }
+
+/** Error text comes from the pasted URL: drop control characters and cap the length before printing it. */
+const sanitize = (text: string): string =>
+  // eslint-disable-next-line no-control-regex
+  text.replace(/[\u0000-\u001f\u007f]/g, '').slice(0, 300);
 
 const safeEqual = (a: string, b: string): boolean => {
   const bufA = Buffer.from(a);
